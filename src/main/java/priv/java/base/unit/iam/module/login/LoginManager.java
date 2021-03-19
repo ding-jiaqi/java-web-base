@@ -4,7 +4,6 @@ import java.util.List;
 
 import priv.java.base.unit.iam.common.model.LoginLicense;
 import priv.java.base.unit.iam.common.model.TokenCard;
-import priv.java.base.unit.iam.common.function.SaFunction;
 import priv.java.base.unit.iam.module.session.Session;
 
 /**

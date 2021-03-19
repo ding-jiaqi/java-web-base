@@ -22,7 +22,6 @@ import priv.java.base.unit.iam.module.token.TokenService;
 import priv.java.base.unit.iam.common.exception.NotLoginException;
 import priv.java.base.unit.iam.common.exception.NotPermissionException;
 import priv.java.base.unit.iam.common.exception.NotRoleException;
-import priv.java.base.unit.iam.common.function.SaFunction;
 import priv.java.base.unit.iam.module.session.Session;
 import priv.java.base.unit.iam.module.session.TokenSign;
 import priv.java.base.unit.iam.common.util.AppConst;
