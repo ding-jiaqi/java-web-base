@@ -1,9 +1,9 @@
 spring:
   # 配置数据库连接池
   datasource:
-    url: jdbc:mysql://10.0.0.53:3306/basic_project?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/java-web-base?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     username: root
-    password: 1470634109
+    password: 123456789
   ### 配置Redis
   redis:
     database: 0

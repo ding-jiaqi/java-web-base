@@ -1,6 +1,5 @@
 package priv.java.base.access.module.user.controller;
 
-
 import priv.java.base.common.constant.ResultEnum;
 import priv.java.base.access.module.user.model.AddUserForm;
 import priv.java.base.access.module.user.model.ListUserForm;
@@ -22,13 +21,14 @@ import org.springframework.web.bind.annotation.*;
  * Utils: Intellij Idea
  * Description: 用户前端控制器
  */
-@RestController
+
 @Api(tags = "用户")
-@AllArgsConstructor
 @RequestMapping("/user")
+@RestController
+@AllArgsConstructor
 public class UserController {
 
-    private IUserService userService;
+    private final IUserService userService;
 
     /**
      * 添加用户

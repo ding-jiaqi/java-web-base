@@ -7,7 +7,7 @@ package priv.java.base.common.util;
  * @version 1.0
  * @author: DingJiaQi
  */
-public class SnowFlakeID {
+public class SnowFlakeFactory {
     /**
      * 起始的时间戳
      */
@@ -37,9 +37,16 @@ public class SnowFlakeID {
     private long datacenterId;  //数据中心
     private long machineId;     //机器标识
     private long sequence = 0L; //序列号
-    private long lastStmp = -1L;//上一次时间戳
+    private long lastSTMP = -1L;//上一次时间戳
 
-    public SnowFlakeID(long datacenterId, long machineId) {
+    private SnowFlakeFactory() {}
+
+    /**
+     * 创建唯一的ID工厂
+     * @param datacenterId 数据中心标识
+     * @param machineId 机器标识
+     */
+    private SnowFlakeFactory(long datacenterId, long machineId) {
         if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
             throw new IllegalArgumentException("datacenterId can't be greater than MAX_DATACENTER_NUM or less than 0");
         }
@@ -53,15 +60,16 @@ public class SnowFlakeID {
     /**
      * 产生下一个ID
      *
-     * @return
+     * @return 整型ID
      */
-    public synchronized long nextId() {
-        long currSTMP = getNewstmp();
-        if (currSTMP < lastStmp) {
+    private synchronized long nextID() {
+        // 当前时间戳
+        long currSTMP = getNewSTMP();
+        if (currSTMP < lastSTMP) {
             throw new RuntimeException("Clock moved backwards.  Refusing to generate id");
         }
 
-        if (currSTMP == lastStmp) {
+        if (currSTMP == lastSTMP) {
             //相同毫秒内，序列号自增
             sequence = (sequence + 1) & MAX_SEQUENCE;
             //同一毫秒的序列数已经达到最大
@@ -73,7 +81,7 @@ public class SnowFlakeID {
             sequence = 0L;
         }
 
-        lastStmp = currSTMP;
+        lastSTMP = currSTMP;
 
         return (currSTMP - START_TIME) << TIMESTMP_LEFT //时间戳部分
                 | datacenterId << DATACENTER_LEFT       //数据中心部分
@@ -82,22 +90,41 @@ public class SnowFlakeID {
     }
 
     private long getNextMill() {
-        long mill = getNewstmp();
-        while (mill <= lastStmp) {
-            mill = getNewstmp();
+        long mill = getNewSTMP();
+        while (mill <= lastSTMP) {
+            mill = getNewSTMP();
         }
         return mill;
     }
 
-    private long getNewstmp() {
+    /**
+     * 获取最新时间戳
+     * @return 毫秒数
+     */
+    private long getNewSTMP() {
         return System.currentTimeMillis();
     }
 
-    public static void main(String[] args) {
-        SnowFlakeID snowFlake = new SnowFlakeID(2, 3);
+    // 实例
+    private static SnowFlakeFactory factory;
 
+    /**
+     * 生成ID
+     * @return 字符串ID
+     */
+    public static String generateID() {
+        if (factory == null) {
+            factory = new SnowFlakeFactory(1, 1);
+        }
+        return String.valueOf(factory.nextID());
+    }
+
+    public static void main(String[] args) {
+/*
+        SnowFlakeFactory snowFlake = new SnowFlakeFactory(2, 3);
+*/
         for (int i = 0; i < (1 << 12); i++) {
-            System.out.println(snowFlake.nextId());
+            System.out.println(generateID());
         }
 
     }

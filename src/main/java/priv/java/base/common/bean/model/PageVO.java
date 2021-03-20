@@ -18,24 +18,24 @@ public class PageVO<T> {
     /**
      * 分页数据
      */
-    @ApiModelProperty(value = "分页数据")
+    @ApiModelProperty(value = "页数据")
     private List<T> records;
     /**
      * 总条数
      */
-    @ApiModelProperty(value = "总条数")
+    @ApiModelProperty(value = "总记录数")
     private Integer total;
 
     /**
      * 总页数
      */
-    @ApiModelProperty(value = "总页数")
+    @ApiModelProperty(value = "页数")
     private Integer pages;
 
     /**
      * 当前页
      */
-    @ApiModelProperty(value = "当前页")
+    @ApiModelProperty(value = "当前页码")
     private Integer current;
 
     /**

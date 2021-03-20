@@ -2,7 +2,7 @@ server:
   # 服务器端口号
   port: 8080
   servlet:
-    context-path: /basic_project
+    context-path: /java-web-base
 spring:
   profiles:
     # 选择环境
@@ -40,7 +40,7 @@ spring:
 # mybatis_plus
 mybatis-plus:
   # xml路径
-  mapper-locations: classpath:mapping/*Mapper.xml
+  mapper-locations: classpath*:mapper/**/*.xml
 
 # 配置swagger
 swagger:
@@ -49,4 +49,4 @@ swagger:
   title: 基础项目
   description: 接口文档
   # 扫描的包路径
-  basePackage: com.hxh.basic.project.controller
+  basePackage: priv.**.controller

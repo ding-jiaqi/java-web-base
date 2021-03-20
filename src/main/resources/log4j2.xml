@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 5s监测一次文件改动(热重载)，自身打印级别为：WARN -->
+<configuration status="WARN" monitorInterval="5">
+    <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+
+    <!-- 定义变量 -->
+    <Properties>
+        <!-- 日志格式 -->
+        <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [级别]: %-5level [线程]:%t [位置]:%l%n--[消息]:%m%n" />
+        <property name="LOG_FORMAT_CONSOLE" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [级别]: %highlight{%-5level}{FATAL=red, ERROR=red, WARN=yellow, INFO=blue, DEBUG=magenta, TRACE=green} [线程]:%t [位置]:%l%n--[消息]:%highlight{%m}%n" />
+        <!-- 日志保存路径 -->
+        <property name="FILE_PATH" value="D:\Log\Project" />
+        <!-- 项目名 -->
+        <property name="FILE_NAME" value="java-web-base" />
+    </Properties>
+
+    <!-- 输出源 -->
+    <appenders>
+        <!-- 将运行日志输出到控制台 -->
+        <console name="Console" target="SYSTEM_OUT">
+            <!--输出日志的格式，输出 ANSI 转义代码-->
+            <PatternLayout pattern="${LOG_FORMAT_CONSOLE}" disableAnsi="false" noConsoleNoAnsi="false"/>
+            <!--控制台只输出level及其以上级别的信息（onMatch="ACCEPT"），其他的直接拒绝（onMismatch="DENY"）-->
+            <Filters>
+                <!--输出级别-->
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+        </console>
+
+        <!--输出到本地，每次重启应用会被清空-->
+        <File name="OutputToLocal" fileName="${FILE_PATH}/${FILE_NAME}/running.log" append="false">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </File>
+
+        <!-- 自动打包INFO信息到本地-->
+        <RollingFile name="PackInfoToLocal" fileName="${FILE_PATH}\${FILE_NAME}\Running.log" filePattern="${FILE_PATH}\${FILE_NAME}\info_log\info_%d{yyyy-MM-dd-HH}.log.gz">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <!--按时间打包，每到24小时的倍数打包一次，默认是1 hour-->
+                <TimeBasedTriggeringPolicy interval="24" modulate="true" />
+                <!-- 满足指定大小自动打包，文件空间>10MB打包一次 -->
+                <!--<SizeBasedTriggeringPolicy size="10MB"/>-->
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+
+    </appenders>
+
+    <!-- 自定义日志输出形式 -->
+    <loggers>
+        <!-- 过滤掉DEBUG信息，禁止向上传播 -->
+        <logger name="org.mybatis" level="INFO" additivity="false">
+            <!-- 指定输出源 -->
+            <AppenderRef ref="Console"/>
+        </logger>
+        <!-- 过滤掉DEBUG信息，禁止向上传播 -->
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <!-- 过滤掉DEBUG信息，禁止向上传播 -->
+        <Logger name="org.hibernate" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <!-- 关闭mybatis日志控制台输出，禁止向上传播 -->
+        <Logger name="top.dingjiaqi.cloudstorage.mapper" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- 启用输出源，全局默认级别为ALL-->
+        <root level="ALL">
+            <!-- 启用日志输出源 -->
+            <appender-ref ref="Console"/>
+            <appender-ref ref="OutputToLocal"/>
+            <appender-ref ref="PackInfoToLocal"/>
+        </root>
+    </loggers>
+
+</configuration>

@@ -2,6 +2,7 @@ package priv.java.base.access.module.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.context.annotation.Primary;
 import priv.java.base.access.module.user.dao.UserMapper;
 import priv.java.base.common.bean.entity.UserDO;
 import priv.java.base.common.constant.ResultEnum;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements IUserService {
 
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     /**
      * 添加用户
